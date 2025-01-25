@@ -15,8 +15,8 @@ interface Todo {
 }
 
 interface AppState {
-    list:List[];
-    workspace:Workspace[];
+    lists:List[];
+    workspaces:Workspace[];
     todos:Todo[];
     editIndex:number|null;
     dropdown:number|null;
@@ -57,9 +57,9 @@ interface AppState {
 
 
 export const useStore = create<AppState>((set) => ({
-    list:[],
-    workspace:[],
-    todos:[],
+    lists: [],
+    workspaces: [],
+    todos: [],
     editIndex:null,
     dropdown: null,
     editText:"",
@@ -74,16 +74,16 @@ export const useStore = create<AppState>((set) => ({
     modalType:null,
 
         addList:(name,emoji)=>set((state)=>({
-            list:[...state.list,{name,emoji}],
+            lists:[...state.lists,{name,emoji}],
         })),
 
         addWorkspace:(name,emoji)=>set((state)=>({
-            workspace:[...state.workspace,{name,emoji}],    
+            workspaces:[...state.workspaces,{name,emoji}],    
         })),
 
         addTodo:(todo)=>set((state)=>({
             todos:[...state.todos,todo],
-        })),
+        })), 
 
         updateTodo:(index,updateTodo)=>set((state)=>{
             const newTodos=[...state.todos];
@@ -159,22 +159,26 @@ export const useStore = create<AppState>((set) => ({
              return{
                 todos:[...state.todos,newTodo],
                 todoText:"",
-                // selectedText:"",
+                selectedWorkspace:"",
                 selectedList:"",
              }
         }),
 
         setModalName:(name)=>set({modalName:name}),
+
         setModalEmoji:(emoji)=>set({modalEmoji:emoji}),
+
         setModalType:(type)=>set({modalType:type}),
 
         handleSaveModal:()=>set((state)=>{
             const {modalName, modalEmoji, modalType}=state;
 
             if(modalName.trim()==="")return state;
+
             if(modalType==="List"){
                 state.addList(modalName,modalEmoji);
-            }else if(modalType==="Workspace"){
+            }
+            else if(modalType==="Workspace"){
                 state.addWorkspace(modalName,modalEmoji);
             }
 
@@ -182,8 +186,8 @@ export const useStore = create<AppState>((set) => ({
                 modalName:"",
                 modalEmoji:"",
                 modalType:null,
-                isListOpen:false,
-                isWorkspaceOpen:false,
+                isListModalOpen:false,
+                isWorkspaceModalOpen:false,
             };
         }),
 
